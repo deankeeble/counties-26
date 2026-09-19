@@ -10,6 +10,7 @@ import typer
 
 from counties26 import db
 from counties26.announcement import format_announcement
+from counties26.corrections import clear_round, edit_score, swap_positions
 from counties26.draw_import import import_draw
 from counties26.importer import build_import_report, commit_import, write_unknown_aliases
 from counties26.players import add_player_alias
@@ -115,6 +116,80 @@ def add_alias_cmd(
         raise typer.Exit(code=2) from error
     typer.secho(
         f"Added alias {alias!r} for {player_name!r} on team {team_number}.",
+        fg=typer.colors.GREEN,
+    )
+
+
+@app.command("edit-score")
+def edit_score_cmd(
+    player_name: str = typer.Option(..., "--player", help="Player name or known alias"),
+    position: int = typer.Option(..., "--position", help="Play position in that game"),
+    score: int = typer.Option(..., "--score", help="Corrected scratch score"),
+    round: int = typer.Option(..., "--round", "--tournament-game", help="Tournament game/round number"),
+    division: str = typer.Option(..., help="'men' or 'women'"),
+    db_path: Path = DB_OPTION,
+) -> None:
+    """Correct one imported score and recompute the fixture."""
+    conn = _connect(db_path)
+    try:
+        canonical_name, fixture_id, new_score = edit_score(
+            conn, division, round, player_name, position, score
+        )
+    except ValueError as error:
+        typer.secho(str(error), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=2) from error
+    typer.secho(
+        f"Updated {canonical_name} in fixture {fixture_id} to {new_score}.",
+        fg=typer.colors.GREEN,
+    )
+
+
+@app.command("swap-positions")
+def swap_positions_cmd(
+    first_player: str = typer.Option(..., "--first", help="First player name or alias"),
+    second_player: str = typer.Option(..., "--second", help="Second player name or alias"),
+    round: int = typer.Option(..., "--round", "--tournament-game", help="Tournament game/round number"),
+    division: str = typer.Option(..., help="'men' or 'women'"),
+    db_path: Path = DB_OPTION,
+) -> None:
+    """Swap two players' positions in an imported fixture and recompute it."""
+    conn = _connect(db_path)
+    try:
+        first, second, first_position, second_position, fixture_id = swap_positions(
+            conn, division, round, first_player, second_player
+        )
+    except ValueError as error:
+        typer.secho(str(error), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=2) from error
+    typer.secho(
+        f"Swapped {first} (position {first_position}) and {second} "
+        f"(position {second_position}) in fixture {fixture_id}.",
+        fg=typer.colors.GREEN,
+    )
+
+
+@app.command("clear-round")
+def clear_round_cmd(
+    round: int = typer.Option(..., "--round", "--tournament-game", help="Tournament game/round number"),
+    division: str = typer.Option(..., help="'men' or 'women'"),
+    yes: bool = typer.Option(False, "--yes", help="Skip the confirmation prompt"),
+    db_path: Path = DB_OPTION,
+) -> None:
+    """Delete imported scores for one round while preserving the draw and roster."""
+    conn = _connect(db_path)
+    if not yes and not typer.confirm(
+        f"Delete all imported scores and calculated points for {division} round {round}?"
+    ):
+        typer.secho("Aborted — nothing was deleted.", fg=typer.colors.RED)
+        raise typer.Exit(code=1)
+    try:
+        score_count, points_count = clear_round(conn, division, round)
+    except ValueError as error:
+        typer.secho(str(error), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=2) from error
+    typer.secho(
+        f"Cleared {division} round {round}: {score_count} scores and "
+        f"{points_count} calculated team results.",
         fg=typer.colors.GREEN,
     )
 

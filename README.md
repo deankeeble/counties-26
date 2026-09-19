@@ -37,6 +37,19 @@ counties26 import scores.csv --round 5 --game 2 --division men --swap-lanes
 # After editing unknown_players.csv to fill in player_name values
 counties26 add-aliases unknown_players.csv
 
+# Correct one already-imported score after making a database backup
+cp counties26.db counties26-before-correction.db
+counties26 edit-score --division women --round 2 \
+  --player "Gareth Jones" --position 3 --score 214
+
+# Correct a lineup order mistake without moving either player's score
+counties26 swap-positions --division women --round 2 \
+  --first "Laura Marcham" --second "Laura Ivory"
+
+# Clear one imported round and start that round again
+cp counties26.db counties26-before-round-reset.db
+counties26 clear-round --division women --round 2
+
 # Anytime
 counties26 show-standings --division men
 counties26 build-site --output docs
