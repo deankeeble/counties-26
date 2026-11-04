@@ -55,6 +55,21 @@ counties26 show-standings --division men
 counties26 build-site --output docs
 ```
 
+## Local Testing
+
+After building the site with `counties26 build-site --output docs`, you can test it locally without publishing:
+
+```bash
+# Serve the docs directory on http://localhost:8000
+cd docs
+python -m http.server
+
+# Or specify a different port
+python -m http.server 8080
+```
+
+Then open your browser to `http://localhost:8000` (or your chosen port) to view the site. Changes can be previewed by rebuilding the site with `counties26 build-site --output docs` and refreshing your browser.
+
 ## Development
 
 Known centre-export names and abbreviations are resolved automatically using the
