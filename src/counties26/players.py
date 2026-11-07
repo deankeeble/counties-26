@@ -137,3 +137,76 @@ def resolve_player_name(
     if len(surname_matches) == 1:
         return surname_matches[0]
     return None
+
+def suggest_player_candidates(
+    conn: sqlite3.Connection, team_id: int, export_name: str
+) -> list[str]:
+    """Return ranked list of likely player matches for an alias, best first.
+    
+    Uses the same heuristics as resolve_player_name but returns all candidates
+    ranked by specificity rather than only returning unique exact matches.
+    """
+    normalized = normalize_player_name(export_name)
+    if not normalized:
+        return []
+    
+    players = conn.execute(
+        "SELECT id, name FROM players WHERE team_id = ? ORDER BY name",
+        (team_id,),
+    ).fetchall()
+    
+    candidates = [player["name"] for player in players]
+    
+    # Exact match (normalized)
+    exact = [
+        name for name in candidates
+        if normalize_player_name(name) == normalized
+    ]
+    if exact:
+        return exact
+    
+    def name_parts(name: str) -> list[str]:
+        return re.findall(r"[a-z0-9]+", name.casefold())
+    
+    export_parts = export_name.casefold().split()
+    if not export_parts:
+        return []
+    
+    # First name match (single word alias)
+    if len(export_parts) == 1:
+        first_matches = [
+            name for name in candidates
+            if name_parts(name) and name_parts(name)[0] == export_parts[0]
+        ]
+        if first_matches:
+            return first_matches
+    
+    # First name + initial (e.g., "Dave S" -> "David Something")
+    if len(export_parts) >= 2:
+        initial_matches = [
+            name for name in candidates
+            if len(name_parts(name)) >= 2
+            and name_parts(name)[0] == export_parts[0]
+            and name_parts(name)[1].startswith(export_parts[1][0])
+        ]
+        if initial_matches:
+            return initial_matches
+    
+    # Surname match
+    surname_matches = [
+        name for name in candidates
+        if name_parts(name) and name_parts(name)[-1] == export_parts[-1]
+    ]
+    if surname_matches:
+        return surname_matches
+    
+    # Fuzzy: first name partial
+    partial_first = [
+        name for name in candidates
+        if name_parts(name)
+        and export_parts[0] in name_parts(name)[0]
+    ]
+    if partial_first:
+        return partial_first
+    
+    return candidates

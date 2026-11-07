@@ -299,3 +299,58 @@ def build_site_cmd(
 
 if __name__ == "__main__":
     app()
+
+
+@app.command("suggest-aliases")
+def suggest_aliases_cmd(
+    unknown_csv: Path,
+    output: Optional[Path] = typer.Option(
+        None, "--output", help="Output file (default: overwrites input)"
+    ),
+    db_path: Path = DB_OPTION,
+) -> None:
+    """Suggest player names for unknown aliases using fuzzy matching.
+    
+    Reads an unknown-aliases CSV and fills in suggested player_name values
+    by matching each alias to the team roster. Edit the results before
+    running add-aliases.
+    """
+    from counties26.players import suggest_player_candidates
+    
+    conn = _connect(db_path)
+    
+    # Read unknown aliases
+    rows = []
+    with open(unknown_csv, newline="", encoding="utf-8") as fh:
+        for row in csv.DictReader(fh):
+            rows.append(row)
+    
+    if not rows:
+        typer.secho("No unknown aliases to process.", fg=typer.colors.YELLOW)
+        return
+    
+    # Suggest player names
+    for row in rows:
+        if row.get("player_name", "").strip():
+            continue  # Skip already filled
+        
+        team = conn.execute(
+            "SELECT id FROM teams WHERE division = ? AND team_number = ?",
+            (row["division"], int(row["team_number"])),
+        ).fetchone()
+        
+        if not team:
+            continue
+        
+        candidates = suggest_player_candidates(conn, team["id"], row["alias"])
+        if candidates:
+            row["player_name"] = candidates[0]
+    
+    # Write results
+    output_path = output or unknown_csv
+    with open(output_path, "w", newline="", encoding="utf-8") as fh:
+        writer = csv.DictWriter(fh, fieldnames=["division", "team_number", "team_name", "alias", "player_name"])
+        writer.writeheader()
+        writer.writerows(rows)
+    
+    typer.secho(f"Suggestions written to {output_path}", fg=typer.colors.GREEN)
