@@ -6,6 +6,8 @@ from __future__ import annotations
 import sqlite3
 from dataclasses import dataclass
 
+from counties26.scoring import compute_individual_points
+
 
 @dataclass(frozen=True)
 class TeamStanding:
@@ -22,6 +24,7 @@ class BowlerStat:
     games_played: int
     average: float
     high_score: int
+    peterson_points: float
 
 
 def team_standings(conn: sqlite3.Connection, division: str) -> list[TeamStanding]:
@@ -97,10 +100,45 @@ def _head_to_head_points(
     return row["points"]
 
 
+def _calculate_peterson_points(conn: sqlite3.Connection, team_id: int, bowler_name: str) -> float:
+    """Calculate total individual bonus points for a bowler across all their games."""
+    rows = conn.execute(
+        """
+        SELECT bs.fixture_id, bs.play_position, bs.scratch_score
+        FROM bowler_scores bs
+        WHERE bs.team_id = ? AND bs.bowler_name = ?
+        ORDER BY bs.fixture_id, bs.play_position
+        """,
+        (team_id, bowler_name),
+    ).fetchall()
+    
+    total_peterson = 0.0
+    for row in rows:
+        fixture_id = row["fixture_id"]
+        position = row["play_position"]
+        score = row["scratch_score"]
+        
+        opponent_row = conn.execute(
+            """
+            SELECT bs.scratch_score
+            FROM bowler_scores bs
+            WHERE bs.fixture_id = ? AND bs.play_position = ? AND bs.team_id != ?
+            """,
+            (fixture_id, position, team_id),
+        ).fetchone()
+        
+        if opponent_row:
+            opponent_score = opponent_row["scratch_score"]
+            bonus, _ = compute_individual_points(score, opponent_score)
+            total_peterson += bonus
+    
+    return total_peterson
+
+
 def bowler_stats(conn: sqlite3.Connection, division: str) -> list[BowlerStat]:
     rows = conn.execute(
         """
-        SELECT t.name AS team_name,
+        SELECT t.id AS team_id, t.name AS team_name,
                bs.bowler_name AS bowler_name,
                COUNT(*) AS games_played,
                AVG(bs.scratch_score) AS average,
@@ -120,6 +158,7 @@ def bowler_stats(conn: sqlite3.Connection, division: str) -> list[BowlerStat]:
             games_played=row["games_played"],
             average=round(row["average"], 1),
             high_score=row["high_score"],
+            peterson_points=round(_calculate_peterson_points(conn, row["team_id"], row["bowler_name"]), 1),
         )
         for row in rows
     ]

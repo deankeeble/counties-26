@@ -36,7 +36,7 @@
 <section class="section-block"><div class="section-heading"><div><p class="eyebrow">02 / individual form</p><h2>Bowler averages</h2></div></div>
 <table class="data-table compact mobile-stack division-bowler-averages">
   <thead>
-    <tr><th scope="col">Bowler</th><th scope="col">Team</th><th scope="col">Games</th><th scope="col">Average</th><th scope="col">High score</th></tr>
+    <tr><th scope="col">Bowler</th><th scope="col">Team</th><th scope="col">Games</th><th scope="col">Average</th><th scope="col">Peterson Points</th><th scope="col">High score</th></tr>
   </thead>
   <tbody>
     {% for bowler in bowlers %}
@@ -45,6 +45,7 @@
       <td data-label="Team">{{ bowler.team_name }}</td>
       <td data-label="Games">{{ bowler.games_played }}</td>
       <td data-label="Average"><strong>{{ bowler.average }}</strong></td>
+      <td data-label="Peterson Points">{{ bowler.peterson_points }}</td>
       <td data-label="High score">{{ bowler.high_score }}</td>
     </tr>
     {% endfor %}
