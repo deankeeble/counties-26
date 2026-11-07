@@ -16,6 +16,7 @@ from counties26.importer import build_import_report, commit_import, write_unknow
 from counties26.players import add_player_alias
 from counties26.site.generate import build_site as _build_site
 from counties26.standings import bowler_stats, team_standings
+from counties26.exports import export_round_scores_csv
 
 app = typer.Typer(help="Scoring tool for the County Championships 2026 bowling tournament")
 
@@ -256,6 +257,33 @@ def announce_winners_cmd(
     """Print the PA-ready final-place announcement for women and men."""
     conn = _connect(db_path)
     typer.echo(format_announcement(conn))
+
+
+@app.command("export-round")
+def export_round_cmd(
+    round: int = typer.Option(..., "--round", "--tournament-game", help="Tournament game/round number"),
+    division: str = typer.Option(..., help="'men' or 'women'"),
+    players_csv: Optional[Path] = typer.Option(
+        None, "--players", help="Players CSV file to determine export order"
+    ),
+    output: Optional[Path] = typer.Option(
+        None, "--output", help="Output file (default: stdout)"
+    ),
+    db_path: Path = DB_OPTION,
+) -> None:
+    """Export all players' scores from a round as CSV (position,score per line)."""
+    conn = _connect(db_path)
+    try:
+        csv_data = export_round_scores_csv(conn, division, round, players_csv)
+    except ValueError as error:
+        typer.secho(str(error), fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=2) from error
+    
+    if output:
+        output.write_text(csv_data, encoding='utf-8')
+        typer.secho(f"Exported {division} round {round} to {output}", fg=typer.colors.GREEN)
+    else:
+        typer.echo(csv_data)
 
 
 @app.command("build-site")
