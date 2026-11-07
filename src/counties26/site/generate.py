@@ -55,4 +55,13 @@ def build_site(conn: sqlite3.Connection, output_dir: str | Path) -> None:
             team_html = team_html.replace('<details class="game" open>', '<details class="game">')
             (output_path / team["href"]).write_text(team_html)
 
+    bigscreen_template = env.get_template("bigscreen.html")
+    women_data = division_page_data(conn, "women")
+    men_data = division_page_data(conn, "men")
+    bigscreen_html = bigscreen_template.render(
+        women_standings=women_data["standings"],
+        men_standings=men_data["standings"],
+    )
+    (output_path / "bigscreen.html").write_text(bigscreen_html)
+
     shutil.copy(STATIC_DIR / "style.css", output_path / "style.css")

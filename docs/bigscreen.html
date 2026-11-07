@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Counties 2026 Standings</title>
+<style>
+:root {
+  --ink: #17252a;
+  --ink-soft: #26383d;
+  --muted: #58686d;
+  --paper: #f1f0eb;
+  --card: #fffefa;
+  --line: #d9ded9;
+  --teal: #3d9f89;
+  --teal-soft: #e1f1eb;
+  --terracotta: #d97e6c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: linear-gradient(135deg, var(--paper) 0%, #f8f7f3 50%, #e9efea 100%);
+  color: var(--ink);
+  font-family: Manrope, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+}
+
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+}
+
+h1 {
+  font-size: 4rem;
+  font-weight: 800;
+  letter-spacing: -0.07em;
+  margin: 0 0 60px 0;
+  text-align: center;
+  line-height: 1;
+}
+
+.standings-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  flex: 1;
+  min-height: 0;
+}
+
+.division-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.division-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--terracotta);
+  margin: 0 0 30px 0;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--card);
+  box-shadow: 0 20px 50px rgba(23, 37, 42, 0.07);
+  overflow: hidden;
+  flex: 1;
+  font-size: 1.3rem;
+}
+
+.data-table th {
+  background: var(--ink);
+  color: white;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  padding: 20px 24px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+.data-table td {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--line);
+  font-size: 1.2rem;
+}
+
+.data-table tbody tr:nth-child(even) {
+  background: #faf9f5;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.team-name {
+  font-weight: 800;
+}
+
+.data-table strong {
+  color: var(--teal);
+  font-weight: 700;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 60px;
+  font-size: 1.1rem;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+}
+
+@media (max-width: 1400px) {
+  body {
+    padding: 30px;
+  }
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 40px;
+  }
+  .standings-wrapper {
+    gap: 40px;
+  }
+  .data-table {
+    font-size: 1.1rem;
+  }
+  .data-table td {
+    padding: 16px 18px;
+    font-size: 1rem;
+  }
+  .data-table th {
+    padding: 16px 18px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .standings-wrapper {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  h1 {
+    font-size: 2.5rem;
+  }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Counties 2026</h1>
+  
+  <div class="standings-wrapper">
+    <div class="division-container">
+      <div class="division-label">Women's Division</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th scope="col">Team</th>
+            <th scope="col">Played</th>
+            <th scope="col">Points</th>
+            <th scope="col">Pinfall</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td class="team-name">Bedfordshire</td>
+            <td>0</td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+          </tr>
+          
+          <tr>
+            <td class="team-name">Derbyshire</td>
+            <td>0</td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+          </tr>
+          
+          <tr>
+            <td class="team-name">Dorset</td>
+            <td>0</td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+          </tr>
+          
+          <tr>
+            <td class="team-name">Essex</td>
+            <td>0</td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+          </tr>
+          
+          <tr>
+            <td class="team-name">Hampshire</td>
+            <td>0</td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+          </tr>
+          
+          <tr>
+            <td class="team-name">Lincolnshire</td>
+            <td>0</td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+          </tr>
+          
+          <tr>
+            <td class="team-name">Northamptonshire</td>
+            <td>0</td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+          </tr>
+          
+          <tr>
+            <td class="team-name">Surrey</td>
+            <td>0</td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+          </tr>
+          
+          <tr>
+            <td class="team-name">Sussex</td>
+            <td>0</td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+          </tr>
+          
+          <tr>
+            <td class="team-name">Yorkshire</td>
+            <td>0</td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="division-container">
+      <div class="division-label">Men's Division</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th scope="col">Team</th>
+            <th scope="col">Played</th>
+            <th scope="col">Points</th>
+            <th scope="col">Pinfall</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td class="team-name">Buckinghamshire</td>
+            <td>0</td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+          </tr>
+          
+          <tr>
+            <td class="team-name">Dorset</td>
+            <td>0</td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+          </tr>
+          
+          <tr>
+            <td class="team-name">Durham</td>
+            <td>0</td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+          </tr>
+          
+          <tr>
+            <td class="team-name">Essex</td>
+            <td>0</td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+          </tr>
+          
+          <tr>
+            <td class="team-name">Hampshire</td>
+            <td>0</td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+          </tr>
+          
+          <tr>
+            <td class="team-name">Lincolnshire</td>
+            <td>0</td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+          </tr>
+          
+          <tr>
+            <td class="team-name">Som &amp; Glo</td>
+            <td>0</td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+          </tr>
+          
+          <tr>
+            <td class="team-name">Surrey</td>
+            <td>0</td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+          </tr>
+          
+          <tr>
+            <td class="team-name">Warwickshire</td>
+            <td>0</td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+          </tr>
+          
+          <tr>
+            <td class="team-name">Yorkshire</td>
+            <td>0</td>
+            <td><strong>0</strong></td>
+            <td>0</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="footer">
+    www.thecounties.org
+  </div>
+</div>
+</body>
+</html>
