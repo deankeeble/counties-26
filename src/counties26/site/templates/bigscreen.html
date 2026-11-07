@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Counties 2026 Standings</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root {
   --ink: #17252a;
@@ -95,13 +96,13 @@ h1 {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-weight: 600;
-  padding: 20px 24px;
+  padding: 16px 18px;
   text-align: left;
   border-bottom: 1px solid var(--line);
 }
 
 .data-table td {
-  padding: 20px 24px;
+  padding: 16px 18px;
   border-bottom: 1px solid var(--line);
   font-size: 1.2rem;
 }
@@ -124,12 +125,26 @@ h1 {
 }
 
 .footer {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
   margin-top: 60px;
   margin-bottom: 40px;
   font-size: 1.8rem;
   color: var(--muted);
   font-family: 'DM Mono', monospace;
+}
+
+.qr-code-container {
+  flex-shrink: 0;
+}
+
+#qrcode, #qrcode2 {
+  display: block;
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
 }
 
 @media (max-width: 1400px) {
@@ -147,11 +162,11 @@ h1 {
     font-size: 1.1rem;
   }
   .data-table td {
-    padding: 16px 18px;
+    padding: 14px 16px;
     font-size: 1rem;
   }
   .data-table th {
-    padding: 16px 18px;
+    padding: 14px 16px;
     font-size: 0.8rem;
   }
 }
@@ -163,6 +178,10 @@ h1 {
   }
   h1 {
     font-size: 2.5rem;
+  }
+  .footer {
+    flex-direction: column;
+    gap: 20px;
   }
 }
 </style>
@@ -222,8 +241,34 @@ h1 {
   </div>
 
   <div class="footer">
-    www.thecounties.org
+    <div class="qr-code-container">
+      <div id="qrcode"></div>
+    </div>
+    <div>www.thecounties.org</div>
+    <div class="qr-code-container">
+      <div id="qrcode2"></div>
+    </div>
   </div>
 </div>
+
+<script>
+new QRCode(document.getElementById("qrcode"), {
+  text: "https://www.thecounties.org",
+  width: 150,
+  height: 150,
+  colorDark: "#17252a",
+  colorLight: "#ffffff",
+  correctLevel: QRCode.CorrectLevel.H
+});
+
+new QRCode(document.getElementById("qrcode2"), {
+  text: "https://www.thecounties.org",
+  width: 150,
+  height: 150,
+  colorDark: "#17252a",
+  colorLight: "#ffffff",
+  correctLevel: QRCode.CorrectLevel.H
+});
+</script>
 </body>
 </html>
