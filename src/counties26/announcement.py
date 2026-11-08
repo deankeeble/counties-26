@@ -8,6 +8,19 @@ from dataclasses import dataclass
 from counties26.constants import require_division
 from counties26.standings import ranked_team_rows
 
+# ANSI color codes
+_COLORS = {
+    1: "\033[92m",  # 1st place: green
+    2: "\033[96m",  # 2nd place: cyan
+    3: "\033[93m",  # 3rd place: yellow
+}
+_RESET = "\033[0m"
+
+
+def _color_for_place(place: int) -> str:
+    """Get ANSI color code for a placement."""
+    return _COLORS.get(place, "")
+
 
 @dataclass(frozen=True)
 class AnnouncementTeam:
@@ -84,13 +97,27 @@ def format_announcement(conn: sqlite3.Connection) -> str:
     """Format the PA-ready announcement in reveal order."""
     lines = ["WINNER ANNOUNCEMENT", "===================", ""]
     for team in announcement_order(conn):
-        lines.append(f"{team.place}{_ordinal_suffix(team.place)} place {team.division}")
-        lines.append(f"{team.team_name} — {team.total_points:g} points")
-        lines.append(f"Pinfall: {team.total_pinfall}")
-        lines.append("Players: " + (", ".join(team.players) if team.players else "not registered"))
+        color = _color_for_place(team.place)
+        place_line = f"{team.place}{_ordinal_suffix(team.place)} place {team.division}"
+        team_line = f"{team.team_name} — {team.total_points:g} points"
+        pinfall_line = f"Pinfall: {team.total_pinfall}"
+        players_line = "Players: " + (", ".join(team.players) if team.players else "not registered")
         above = "n/a" if team.points_behind_above is None else f"{team.points_behind_above:g} behind the team above"
         below = "n/a" if team.points_ahead_of_below is None else f"{team.points_ahead_of_below:g} ahead of the team below"
-        lines.append(f"Gap: {above}; {below}")
+        gap_line = f"Gap: {above}; {below}"
+
+        if color:
+            lines.append(f"{color}{place_line}{_RESET}")
+            lines.append(f"{color}{team_line}{_RESET}")
+            lines.append(f"{color}{pinfall_line}{_RESET}")
+            lines.append(f"{color}{players_line}{_RESET}")
+            lines.append(f"{color}{gap_line}{_RESET}")
+        else:
+            lines.append(place_line)
+            lines.append(team_line)
+            lines.append(pinfall_line)
+            lines.append(players_line)
+            lines.append(gap_line)
         lines.append("")
     return "\n".join(lines).rstrip()
 
