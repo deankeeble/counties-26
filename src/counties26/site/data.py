@@ -10,6 +10,55 @@ from counties26.scoring import compute_individual_points
 from counties26.standings import bowler_stats, team_standings
 
 
+
+def _player_games(conn: sqlite3.Connection, bowler_name: str, team_id: int) -> list[dict]:
+    """Get all games for a specific player with result status."""
+    rows = conn.execute(
+        """
+        SELECT r.round_number, bs.scratch_score, bs.play_position, bs.fixture_id
+        FROM bowler_scores bs
+        JOIN fixtures f ON f.id = bs.fixture_id
+        JOIN rounds r ON r.id = f.round_id
+        WHERE bs.bowler_name = ? AND bs.team_id = ?
+        ORDER BY r.round_number
+        """,
+        (bowler_name, team_id),
+    ).fetchall()
+    
+    games = []
+    for row in rows:
+        player_score = row['scratch_score']
+        position = row['play_position']
+        fixture_id = row['fixture_id']
+        
+        # Get opponent score from the same fixture and position
+        opponent = conn.execute(
+            """
+            SELECT scratch_score FROM bowler_scores
+            WHERE fixture_id = ? AND play_position = ? AND team_id != ?
+            """,
+            (fixture_id, position, team_id),
+        ).fetchone()
+        
+        opponent_score = opponent['scratch_score'] if opponent else None
+        
+        # Determine result
+        result = None
+        if player_score is not None and opponent_score is not None:
+            if player_score > opponent_score:
+                result = 'win'
+            elif player_score < opponent_score:
+                result = 'loss'
+            else:
+                result = 'tie'
+        
+        games.append({
+            'round_number': row['round_number'],
+            'score': player_score,
+            'result': result,
+        })
+    return games
+
 @dataclass(frozen=True)
 class PlayerMatchup:
     position: int
@@ -184,9 +233,23 @@ def division_page_data(conn: sqlite3.Connection, division: str) -> dict[str, obj
             }
         )
     fixtures = _fixtures(conn, division)
+    bowlers_with_games = []
+    for bowler in bowler_stats(conn, division):
+        team_id = team_id_by_name[bowler.team_name]
+        bowler_dict = {
+            "bowler_name": bowler.bowler_name,
+            "team_name": bowler.team_name,
+            "games_played": bowler.games_played,
+            "average": bowler.average,
+            "peterson_points": bowler.peterson_points,
+            "high_score": bowler.high_score,
+            "games": _player_games(conn, bowler.bowler_name, team_id),
+        }
+        bowlers_with_games.append(bowler_dict)
+    
     return {
         "standings": linked_standings,
-        "bowlers": bowler_stats(conn, division),
+        "bowlers": bowlers_with_games,
         "fixtures": fixtures,
         "team_links": team_links,
     }
@@ -203,7 +266,7 @@ def team_page_data(conn: sqlite3.Connection, team_id: int) -> dict[str, object]:
         if team_id in (fixture.team_a_id, fixture.team_b_id)
     ]
     team_bowlers = [
-        stat for stat in division_data["bowlers"] if stat.team_name == team["name"]
+        stat for stat in division_data["bowlers"] if stat["team_name"] == team["name"]
     ]
     roster = conn.execute(
         """

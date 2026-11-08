@@ -29,4 +29,140 @@ h1, h2 { letter-spacing: -.07em; margin: 0; line-height: .94; } h1 { font-size: 
 .roster-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: var(--line); box-shadow: var(--shadow); }.roster-player { display: flex; align-items: center; gap: 14px; padding: 16px 18px; background: var(--card); }.roster-player span { color: var(--teal); font-family: 'DM Mono', monospace; font-size: .7rem; }.roster-player strong { font-size: .95rem; }
 .skip-link { position: absolute; left: 16px; top: -60px; z-index: 10; padding: 10px 14px; background: var(--terracotta); color: white; font-weight: 800; text-decoration: none; transition: top .15s; }.skip-link:focus { top: 16px; }
 .skip-link { position: absolute; left: 16px; top: -60px; z-index: 10; padding: 10px 14px; background: var(--terracotta); color: white; font-weight: 800; text-decoration: none; transition: top .15s; }.skip-link:focus { top: 16px; }
-@media (max-width: 700px) { .shell { padding: 20px 16px 56px; }.landing { padding-top: 8vh; }.landing:after { right: 1rem; top: 7rem; font-size: 8rem; }.division-links { grid-template-columns: 1fr; margin-top: 38px; }.topbar span { gap: 10px; font-size: .62rem; }.game summary { grid-template-columns: 1fr; gap: 8px; }.round-label, .match-title, .match-result { grid-column: 1; }.team-page .game summary { padding: 12px 13px; gap: 5px; }.team-page .game { margin-bottom: 7px; }.team-page .section-heading { margin-top: 35px; margin-bottom: 13px; }.score-banner { flex-wrap: wrap; gap: 8px; }.standings-table th:nth-child(2), .standings-table td:nth-child(2), .standings-table th:nth-child(4), .standings-table td:nth-child(4) { display: none; }.bowler-averages th:nth-child(2), .bowler-averages td:nth-child(2), .bowler-averages th:nth-child(4), .bowler-averages td:nth-child(4) { display: none; }.standings-table th, .standings-table td { padding: 8px 10px; font-size: .9rem; }.mobile-stack { font-size: .9rem; }.mobile-stack th { padding: 8px 10px; font-size: .7rem; }.mobile-stack td { padding: 6px 10px; }.mobile-stack tbody tr { transition: background .15s; }.mobile-stack tbody tr:nth-child(even) { background: #faf9f5; }.mobile-stack tbody tr:hover { background: var(--teal-soft); }.section-heading { align-items: start; flex-direction: column; }.stat-strip { grid-template-columns: 1fr; }.stat-strip strong { font-size: 1.5rem; }.stat-strip div:nth-child(2) strong { font-size: 1.8rem; }.stat-strip div { padding: 17px 12px; }.roster-grid { grid-template-columns: 1fr; } .compact.mobile-stack { table-layout: fixed; }.compact.mobile-stack th, .compact.mobile-stack td { padding: 6px 6px; overflow-wrap: anywhere; letter-spacing: 0; }.compact.mobile-stack th:nth-child(1) { width: 30%; }.compact.mobile-stack th:nth-child(2) { width: 24%; }.division-bowler-averages th:nth-child(1) { width: 40% !important; }.division-bowler-averages th:nth-child(2) { width: 40% !important; }.division-bowler-averages th:nth-child(4) { width: 20% !important; }.division-bowler-averages th:nth-child(3), .division-bowler-averages td:nth-child(3), .division-bowler-averages th:nth-child(6), .division-bowler-averages td:nth-child(6) { display: none !important; } }
+/* Bowler detail panels */
+.bowler-detail { list-style: none; margin: 0; padding: 0; }
+.bowler-detail summary { cursor: pointer; padding: 0; margin: 0; display: inline; color: inherit; text-decoration: none; border-bottom: 2px solid var(--teal); }
+.bowler-detail summary:hover { color: var(--terracotta); border-bottom-color: var(--terracotta); }
+.bowler-detail summary::-webkit-details-marker { display: none; }
+.bowler-detail summary:after { content: ' ▼'; font-size: 0.7em; vertical-align: baseline; }
+.bowler-detail[open] summary:after { content: ' ▲'; }
+.bowler-panel { margin-top: 12px; padding: 16px; background: #faf9f5; border: 1px solid var(--line); border-radius: 4px; overflow-x: visible; }
+.bowler-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 16px; }
+.bowler-stats div { padding: 12px; background: var(--card); border-left: 3px solid var(--teal); }
+.bowler-stats span { display: block; font-family: 'DM Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 4px; }
+.bowler-stats strong { display: block; font-size: 1.3rem; }
+.bowler-games { width: auto; border-collapse: collapse; background: var(--card); font-size: 0.95rem; }
+.bowler-games thead { background: var(--ink-soft); color: white; }
+.bowler-games th { font-family: 'DM Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; padding: 10px 12px; text-align: left; }
+.bowler-games td { padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.bowler-games tbody tr:nth-child(even) { background: #faf9f5; }
+.bowler-games tbody tr:hover { background: var(--teal-soft); }
+.bowler-games strong { color: var(--teal); font-weight: 600; }
+
+
+/* Ensure details/summary don't add extra height */
+details { margin: 0; padding: 0; display: contents; }
+summary { display: inline; margin: 0; padding: 0; }
+
+
+
+
+
+
+
+
+/* Score result styling */
+.score-win strong { color: #2d8659; font-weight: 800; }
+.score-loss strong { color: var(--ink); font-weight: 400; }
+.score-tie strong { color: #6b5b95; font-weight: 600; }
+.score-no-result strong { color: var(--muted); }
+
+@media (max-width: 700px) {
+  .shell { padding: 20px 16px 56px; }
+  .landing { padding-top: 8vh; }
+  .landing:after { right: 1rem; top: 7rem; font-size: 8rem; }
+  .division-links { grid-template-columns: 1fr; margin-top: 38px; }
+  .topbar span { gap: 10px; font-size: .62rem; }
+  .game summary { grid-template-columns: 1fr; gap: 8px; }
+  .round-label, .match-title, .match-result { grid-column: 1; }
+  .team-page .game summary { padding: 12px 13px; gap: 5px; }
+  .team-page .game { margin-bottom: 7px; }
+  .team-page .section-heading { margin-top: 35px; margin-bottom: 13px; }
+  .score-banner { flex-wrap: wrap; gap: 8px; }
+  .standings-table th:nth-child(2), .standings-table td:nth-child(2), .standings-table th:nth-child(4), .standings-table td:nth-child(4) { display: none; }
+  .bowler-averages th:nth-child(2), .bowler-averages td:nth-child(2), .bowler-averages th:nth-child(4), .bowler-averages td:nth-child(4) { display: none; }
+  .standings-table th, .standings-table td { padding: 6px 8px; font-size: .9rem; }
+  
+  /* Explicitly override all padding directions on headers */
+  .data-table th { 
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+    font-size: 0.5rem !important; 
+    line-height: 1 !important;
+  }
+  .data-table td { 
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    line-height: 1.25;
+  }
+  
+  .mobile-stack th { 
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+    font-size: 0.5rem !important; 
+    line-height: 1 !important;
+  }
+  .mobile-stack td { 
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    line-height: 1.25;
+  }
+  .mobile-stack tbody tr { transition: background .15s; }
+  .mobile-stack tbody tr:nth-child(even) { background: #faf9f5; }
+  .mobile-stack tbody tr:hover { background: var(--teal-soft); }
+  .section-heading { align-items: start; flex-direction: column; }
+  .stat-strip { grid-template-columns: 1fr; }
+  .stat-strip strong { font-size: 1.5rem; }
+  .stat-strip div:nth-child(2) strong { font-size: 1.8rem; }
+  .stat-strip div { padding: 17px 12px; }
+  .roster-grid { grid-template-columns: 1fr; }
+  .compact.mobile-stack { table-layout: fixed; }
+  .compact.mobile-stack th { 
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+    overflow-wrap: anywhere;
+    letter-spacing: 0;
+  }
+  .compact.mobile-stack th:nth-child(1) { width: 30%; }
+  .compact.mobile-stack th:nth-child(2) { width: 24%; }
+  .division-bowler-averages th:nth-child(1) { width: 40% !important; }
+  .division-bowler-averages th:nth-child(2) { width: 40% !important; }
+  .division-bowler-averages th:nth-child(4) { width: 20% !important; }
+  .division-bowler-averages th:nth-child(3), .division-bowler-averages td:nth-child(3), .division-bowler-averages th:nth-child(6), .division-bowler-averages td:nth-child(6) { display: none !important; }
+  
+  /* Bowler panels */
+  details { margin: 0; padding: 0; display: contents; }
+  summary { display: inline; margin: 0; padding: 0; }
+  .bowler-detail summary { display: inline; }
+  .bowler-stats { grid-template-columns: 1fr; gap: 8px; margin-bottom: 12px; }
+  .bowler-stats div { padding: 8px; }
+  .bowler-stats span { font-size: 0.6rem; margin-bottom: 2px; }
+  .bowler-stats strong { font-size: 1rem; }
+  .bowler-games { font-size: 0.75rem; table-layout: auto; }
+  .bowler-games th { 
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+    font-size: 0.45rem !important; 
+    line-height: 0.3 !important;
+  }
+  .bowler-games td { 
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+    line-height: 1.1;
+  }
+  .bowler-panel { margin-top: 8px; padding: 12px; }
+}
