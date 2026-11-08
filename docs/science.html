@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Counties 2026 Standings Diagram</title>
+<title>Counties 2026 Science</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root {
   --ink: #17252a;
@@ -51,6 +52,10 @@ h1 {
   margin: 0 0 40px 0;
   text-align: center;
   line-height: 1;
+}
+
+h2 {
+  margin: 0;
 }
 
 .division-section {
@@ -158,6 +163,34 @@ h1 {
   box-shadow: 0 2px 8px rgba(23, 37, 42, 0.1);
 }
 
+.charts-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  margin-top: 80px;
+  margin-bottom: 40px;
+}
+
+.chart-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.chart-container {
+  background: var(--card);
+  box-shadow: 0 20px 50px rgba(23, 37, 42, 0.07);
+  padding: 30px;
+  border-radius: 2px;
+  position: relative;
+  height: 400px;
+  width: 100%;
+}
+
+.chart-canvas {
+  max-height: 100%;
+}
+
 .footer {
   display: flex;
   align-items: center;
@@ -176,6 +209,10 @@ h1 {
     width: 40px;
     font-size: 0.7rem;
   }
+  .charts-wrapper {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
 }
 
 @media (max-width: 900px) {
@@ -190,15 +227,17 @@ h1 {
     flex-direction: column;
     gap: 20px;
   }
+  .charts-wrapper {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
 }
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>Counties 2026 H2H Bonus Points</h1>
-
   <div class="division-section">
-    <div class="division-label">Women's Division</div>
+    <h2 class="division-label">Women's Division</h2>
     <div class="matrix-wrapper">
       <table class="matrix-table">
         <thead>
@@ -238,63 +277,63 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(150, 167, 199);" title="Essex vs Yorkshire: 60 pts">
+                  <td class="matrix-cell" style="background-color: rgb(171, 178, 225);" title="Essex vs Yorkshire: 60 pts">
                     60
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(98, 123, 171);" title="Essex vs Lincolnshire: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Essex vs Lincolnshire: 70 pts">
                     70
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Essex vs Surrey: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Essex vs Surrey: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(46, 80, 144);" title="Essex vs Hampshire: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(96, 110, 203);" title="Essex vs Hampshire: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(98, 123, 171);" title="Essex vs Northamptonshire: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Essex vs Northamptonshire: 70 pts">
                     70
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(161, 108, 62);" title="Essex vs Derbyshire: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Essex vs Derbyshire: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(98, 123, 171);" title="Essex vs Bedfordshire: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Essex vs Bedfordshire: 70 pts">
                     70
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(98, 123, 171);" title="Essex vs Dorset: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Essex vs Dorset: 70 pts">
                     70
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Essex vs Sussex: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Essex vs Sussex: 0 pts">
                     0
                   </td>
                 
@@ -306,7 +345,7 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(122, 157, 89);" title="Yorkshire vs Essex: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(220, 149, 163);" title="Yorkshire vs Essex: 20 pts">
                     20
                   </td>
                 
@@ -317,56 +356,56 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(176, 189, 213);" title="Yorkshire vs Lincolnshire: 55 pts">
+                  <td class="matrix-cell" style="background-color: rgb(190, 195, 230);" title="Yorkshire vs Lincolnshire: 55 pts">
                     55
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Yorkshire vs Surrey: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Yorkshire vs Surrey: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Yorkshire vs Hampshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Yorkshire vs Hampshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(161, 108, 62);" title="Yorkshire vs Northamptonshire: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Yorkshire vs Northamptonshire: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(98, 123, 171);" title="Yorkshire vs Derbyshire: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Yorkshire vs Derbyshire: 70 pts">
                     70
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(150, 167, 199);" title="Yorkshire vs Bedfordshire: 60 pts">
+                  <td class="matrix-cell" style="background-color: rgb(171, 178, 225);" title="Yorkshire vs Bedfordshire: 60 pts">
                     60
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(46, 80, 144);" title="Yorkshire vs Dorset: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(96, 110, 203);" title="Yorkshire vs Dorset: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(98, 123, 171);" title="Yorkshire vs Sussex: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Yorkshire vs Sussex: 70 pts">
                     70
                   </td>
                 
@@ -378,14 +417,14 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(161, 108, 62);" title="Lincolnshire vs Essex: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Lincolnshire vs Essex: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(103, 181, 103);" title="Lincolnshire vs Yorkshire: 25 pts">
+                  <td class="matrix-cell" style="background-color: rgb(226, 174, 184);" title="Lincolnshire vs Yorkshire: 25 pts">
                     25
                   </td>
                 
@@ -396,49 +435,49 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(98, 123, 171);" title="Lincolnshire vs Surrey: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Lincolnshire vs Surrey: 70 pts">
                     70
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Lincolnshire vs Hampshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Lincolnshire vs Hampshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(46, 80, 144);" title="Lincolnshire vs Northamptonshire: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(96, 110, 203);" title="Lincolnshire vs Northamptonshire: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(176, 189, 213);" title="Lincolnshire vs Derbyshire: 55 pts">
+                  <td class="matrix-cell" style="background-color: rgb(190, 195, 230);" title="Lincolnshire vs Derbyshire: 55 pts">
                     55
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Lincolnshire vs Bedfordshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Lincolnshire vs Bedfordshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(46, 80, 144);" title="Lincolnshire vs Dorset: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(96, 110, 203);" title="Lincolnshire vs Dorset: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(46, 80, 144);" title="Lincolnshire vs Sussex: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(96, 110, 203);" title="Lincolnshire vs Sussex: 80 pts">
                     80
                   </td>
                 
@@ -450,21 +489,21 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Surrey vs Essex: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Surrey vs Essex: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Surrey vs Yorkshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Surrey vs Yorkshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(161, 108, 62);" title="Surrey vs Lincolnshire: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Surrey vs Lincolnshire: 10 pts">
                     10
                   </td>
                 
@@ -475,42 +514,42 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(150, 167, 199);" title="Surrey vs Hampshire: 60 pts">
+                  <td class="matrix-cell" style="background-color: rgb(171, 178, 225);" title="Surrey vs Hampshire: 60 pts">
                     60
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Surrey vs Northamptonshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: rgb(193, 52, 79);" title="Surrey vs Northamptonshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(46, 80, 144);" title="Surrey vs Derbyshire: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(96, 110, 203);" title="Surrey vs Derbyshire: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(98, 123, 171);" title="Surrey vs Bedfordshire: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Surrey vs Bedfordshire: 70 pts">
                     70
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(98, 123, 171);" title="Surrey vs Dorset: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Surrey vs Dorset: 70 pts">
                     70
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(98, 123, 171);" title="Surrey vs Sussex: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Surrey vs Sussex: 70 pts">
                     70
                   </td>
                 
@@ -522,28 +561,28 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Hampshire vs Essex: 0 pts">
+                  <td class="matrix-cell" style="background-color: rgb(193, 52, 79);" title="Hampshire vs Essex: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Hampshire vs Yorkshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Hampshire vs Yorkshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Hampshire vs Lincolnshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Hampshire vs Lincolnshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(122, 157, 89);" title="Hampshire vs Surrey: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(220, 149, 163);" title="Hampshire vs Surrey: 20 pts">
                     20
                   </td>
                 
@@ -554,35 +593,35 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(98, 123, 171);" title="Hampshire vs Northamptonshire: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Hampshire vs Northamptonshire: 70 pts">
                     70
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(150, 167, 199);" title="Hampshire vs Derbyshire: 60 pts">
+                  <td class="matrix-cell" style="background-color: rgb(171, 178, 225);" title="Hampshire vs Derbyshire: 60 pts">
                     60
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(122, 157, 89);" title="Hampshire vs Bedfordshire: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(220, 149, 163);" title="Hampshire vs Bedfordshire: 20 pts">
                     20
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(98, 123, 171);" title="Hampshire vs Dorset: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Hampshire vs Dorset: 70 pts">
                     70
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(150, 167, 199);" title="Hampshire vs Sussex: 60 pts">
+                  <td class="matrix-cell" style="background-color: rgb(171, 178, 225);" title="Hampshire vs Sussex: 60 pts">
                     60
                   </td>
                 
@@ -594,35 +633,35 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(161, 108, 62);" title="Northamptonshire vs Essex: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Northamptonshire vs Essex: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(98, 123, 171);" title="Northamptonshire vs Yorkshire: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Northamptonshire vs Yorkshire: 70 pts">
                     70
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Northamptonshire vs Lincolnshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: rgb(193, 52, 79);" title="Northamptonshire vs Lincolnshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(46, 80, 144);" title="Northamptonshire vs Surrey: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(96, 110, 203);" title="Northamptonshire vs Surrey: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(161, 108, 62);" title="Northamptonshire vs Hampshire: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Northamptonshire vs Hampshire: 10 pts">
                     10
                   </td>
                 
@@ -633,28 +672,28 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Northamptonshire vs Derbyshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Northamptonshire vs Derbyshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(98, 123, 171);" title="Northamptonshire vs Bedfordshire: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Northamptonshire vs Bedfordshire: 70 pts">
                     70
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Northamptonshire vs Dorset: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Northamptonshire vs Dorset: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(98, 123, 171);" title="Northamptonshire vs Sussex: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Northamptonshire vs Sussex: 70 pts">
                     70
                   </td>
                 
@@ -666,42 +705,42 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(98, 123, 171);" title="Derbyshire vs Essex: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Derbyshire vs Essex: 70 pts">
                     70
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(161, 108, 62);" title="Derbyshire vs Yorkshire: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Derbyshire vs Yorkshire: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(103, 181, 103);" title="Derbyshire vs Lincolnshire: 25 pts">
+                  <td class="matrix-cell" style="background-color: rgb(226, 174, 184);" title="Derbyshire vs Lincolnshire: 25 pts">
                     25
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Derbyshire vs Surrey: 0 pts">
+                  <td class="matrix-cell" style="background-color: rgb(193, 52, 79);" title="Derbyshire vs Surrey: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(122, 157, 89);" title="Derbyshire vs Hampshire: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(220, 149, 163);" title="Derbyshire vs Hampshire: 20 pts">
                     20
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Derbyshire vs Northamptonshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Derbyshire vs Northamptonshire: 0 pts">
                     0
                   </td>
                 
@@ -712,21 +751,21 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Derbyshire vs Bedfordshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Derbyshire vs Bedfordshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(161, 108, 62);" title="Derbyshire vs Dorset: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Derbyshire vs Dorset: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(98, 123, 171);" title="Derbyshire vs Sussex: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Derbyshire vs Sussex: 70 pts">
                     70
                   </td>
                 
@@ -738,49 +777,49 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(161, 108, 62);" title="Bedfordshire vs Essex: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Bedfordshire vs Essex: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(122, 157, 89);" title="Bedfordshire vs Yorkshire: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(220, 149, 163);" title="Bedfordshire vs Yorkshire: 20 pts">
                     20
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Bedfordshire vs Lincolnshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Bedfordshire vs Lincolnshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(161, 108, 62);" title="Bedfordshire vs Surrey: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Bedfordshire vs Surrey: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(150, 167, 199);" title="Bedfordshire vs Hampshire: 60 pts">
+                  <td class="matrix-cell" style="background-color: rgb(171, 178, 225);" title="Bedfordshire vs Hampshire: 60 pts">
                     60
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(161, 108, 62);" title="Bedfordshire vs Northamptonshire: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Bedfordshire vs Northamptonshire: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Bedfordshire vs Derbyshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Bedfordshire vs Derbyshire: 0 pts">
                     0
                   </td>
                 
@@ -791,14 +830,14 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(83, 206, 116);" title="Bedfordshire vs Dorset: 30 pts">
+                  <td class="matrix-cell" style="background-color: rgb(233, 198, 205);" title="Bedfordshire vs Dorset: 30 pts">
                     30
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(161, 108, 62);" title="Bedfordshire vs Sussex: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Bedfordshire vs Sussex: 10 pts">
                     10
                   </td>
                 
@@ -810,56 +849,56 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(161, 108, 62);" title="Dorset vs Essex: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Dorset vs Essex: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Dorset vs Yorkshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: rgb(193, 52, 79);" title="Dorset vs Yorkshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Dorset vs Lincolnshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: rgb(193, 52, 79);" title="Dorset vs Lincolnshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(161, 108, 62);" title="Dorset vs Surrey: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Dorset vs Surrey: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(161, 108, 62);" title="Dorset vs Hampshire: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Dorset vs Hampshire: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Dorset vs Northamptonshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Dorset vs Northamptonshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(98, 123, 171);" title="Dorset vs Derbyshire: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Dorset vs Derbyshire: 70 pts">
                     70
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(202, 211, 227);" title="Dorset vs Bedfordshire: 50 pts">
+                  <td class="matrix-cell" style="background-color: rgb(209, 212, 236);" title="Dorset vs Bedfordshire: 50 pts">
                     50
                   </td>
                 
@@ -870,7 +909,7 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Dorset vs Sussex: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Dorset vs Sussex: 0 pts">
                     0
                   </td>
                 
@@ -882,63 +921,63 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Sussex vs Essex: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Sussex vs Essex: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(161, 108, 62);" title="Sussex vs Yorkshire: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Sussex vs Yorkshire: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Sussex vs Lincolnshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: rgb(193, 52, 79);" title="Sussex vs Lincolnshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(161, 108, 62);" title="Sussex vs Surrey: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Sussex vs Surrey: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(122, 157, 89);" title="Sussex vs Hampshire: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(220, 149, 163);" title="Sussex vs Hampshire: 20 pts">
                     20
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(161, 108, 62);" title="Sussex vs Northamptonshire: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Sussex vs Northamptonshire: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(161, 108, 62);" title="Sussex vs Derbyshire: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Sussex vs Derbyshire: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(98, 123, 171);" title="Sussex vs Bedfordshire: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Sussex vs Bedfordshire: 70 pts">
                     70
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Sussex vs Dorset: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Sussex vs Dorset: 0 pts">
                     0
                   </td>
                 
@@ -955,7 +994,7 @@ h1 {
   </div>
 
   <div class="division-section">
-    <div class="division-label">Men's Division</div>
+    <h2 class="division-label">Men's Division</h2>
     <div class="matrix-wrapper">
       <table class="matrix-table">
         <thead>
@@ -995,63 +1034,63 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(122, 157, 89);" title="Dorset vs Warwickshire: 25 pts">
+                  <td class="matrix-cell" style="background-color: rgb(213, 125, 142);" title="Dorset vs Warwickshire: 25 pts">
                     25
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(46, 80, 144);" title="Dorset vs Hampshire: 100 pts">
+                  <td class="matrix-cell" style="background-color: rgb(59, 76, 192);" title="Dorset vs Hampshire: 100 pts">
                     100
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Dorset vs Yorkshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Dorset vs Yorkshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(129, 150, 188);" title="Dorset vs Durham: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Dorset vs Durham: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(129, 150, 188);" title="Dorset vs Essex: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Dorset vs Essex: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(171, 185, 210);" title="Dorset vs Lincolnshire: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(171, 178, 225);" title="Dorset vs Lincolnshire: 70 pts">
                     70
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(138, 137, 78);" title="Dorset vs Som &amp; Glo: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Dorset vs Som &amp; Glo: 20 pts">
                     20
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(87, 115, 166);" title="Dorset vs Surrey: 90 pts">
+                  <td class="matrix-cell" style="background-color: rgb(96, 110, 203);" title="Dorset vs Surrey: 90 pts">
                     90
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Dorset vs Buckinghamshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Dorset vs Buckinghamshire: 0 pts">
                     0
                   </td>
                 
@@ -1063,7 +1102,7 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(150, 167, 199);" title="Warwickshire vs Dorset: 75 pts">
+                  <td class="matrix-cell" style="background-color: rgb(153, 161, 219);" title="Warwickshire vs Dorset: 75 pts">
                     75
                   </td>
                 
@@ -1074,56 +1113,56 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Warwickshire vs Hampshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Warwickshire vs Hampshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Warwickshire vs Yorkshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Warwickshire vs Yorkshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(129, 150, 188);" title="Warwickshire vs Durham: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Warwickshire vs Durham: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(87, 115, 166);" title="Warwickshire vs Essex: 90 pts">
+                  <td class="matrix-cell" style="background-color: rgb(96, 110, 203);" title="Warwickshire vs Essex: 90 pts">
                     90
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(46, 80, 144);" title="Warwickshire vs Lincolnshire: 100 pts">
+                  <td class="matrix-cell" style="background-color: rgb(59, 76, 192);" title="Warwickshire vs Lincolnshire: 100 pts">
                     100
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(169, 98, 56);" title="Warwickshire vs Som &amp; Glo: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(193, 52, 79);" title="Warwickshire vs Som &amp; Glo: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(46, 80, 144);" title="Warwickshire vs Surrey: 100 pts">
+                  <td class="matrix-cell" style="background-color: rgb(59, 76, 192);" title="Warwickshire vs Surrey: 100 pts">
                     100
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(46, 80, 144);" title="Warwickshire vs Buckinghamshire: 100 pts">
+                  <td class="matrix-cell" style="background-color: rgb(59, 76, 192);" title="Warwickshire vs Buckinghamshire: 100 pts">
                     100
                   </td>
                 
@@ -1135,14 +1174,14 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Hampshire vs Dorset: 0 pts">
+                  <td class="matrix-cell" style="background-color: rgb(180, 4, 38);" title="Hampshire vs Dorset: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Hampshire vs Warwickshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Hampshire vs Warwickshire: 0 pts">
                     0
                   </td>
                 
@@ -1153,49 +1192,49 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(171, 185, 210);" title="Hampshire vs Yorkshire: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(171, 178, 225);" title="Hampshire vs Yorkshire: 70 pts">
                     70
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(129, 150, 188);" title="Hampshire vs Durham: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Hampshire vs Durham: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(138, 137, 78);" title="Hampshire vs Essex: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Hampshire vs Essex: 20 pts">
                     20
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Hampshire vs Lincolnshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Hampshire vs Lincolnshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(129, 150, 188);" title="Hampshire vs Som &amp; Glo: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Hampshire vs Som &amp; Glo: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(129, 150, 188);" title="Hampshire vs Surrey: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Hampshire vs Surrey: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(138, 137, 78);" title="Hampshire vs Buckinghamshire: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Hampshire vs Buckinghamshire: 20 pts">
                     20
                   </td>
                 
@@ -1207,21 +1246,21 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Yorkshire vs Dorset: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Yorkshire vs Dorset: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Yorkshire vs Warwickshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Yorkshire vs Warwickshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(107, 176, 100);" title="Yorkshire vs Hampshire: 30 pts">
+                  <td class="matrix-cell" style="background-color: rgb(220, 149, 163);" title="Yorkshire vs Hampshire: 30 pts">
                     30
                   </td>
                 
@@ -1232,42 +1271,42 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(169, 98, 56);" title="Yorkshire vs Durham: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(193, 52, 79);" title="Yorkshire vs Durham: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(138, 137, 78);" title="Yorkshire vs Essex: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Yorkshire vs Essex: 20 pts">
                     20
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(87, 115, 166);" title="Yorkshire vs Lincolnshire: 90 pts">
+                  <td class="matrix-cell" style="background-color: rgb(96, 110, 203);" title="Yorkshire vs Lincolnshire: 90 pts">
                     90
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(129, 150, 188);" title="Yorkshire vs Som &amp; Glo: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Yorkshire vs Som &amp; Glo: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(138, 137, 78);" title="Yorkshire vs Surrey: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Yorkshire vs Surrey: 20 pts">
                     20
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(129, 150, 188);" title="Yorkshire vs Buckinghamshire: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Yorkshire vs Buckinghamshire: 80 pts">
                     80
                   </td>
                 
@@ -1279,28 +1318,28 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(138, 137, 78);" title="Durham vs Dorset: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Durham vs Dorset: 20 pts">
                     20
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(138, 137, 78);" title="Durham vs Warwickshire: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Durham vs Warwickshire: 20 pts">
                     20
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(138, 137, 78);" title="Durham vs Hampshire: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Durham vs Hampshire: 20 pts">
                     20
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(87, 115, 166);" title="Durham vs Yorkshire: 90 pts">
+                  <td class="matrix-cell" style="background-color: rgb(96, 110, 203);" title="Durham vs Yorkshire: 90 pts">
                     90
                   </td>
                 
@@ -1311,35 +1350,35 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(171, 185, 210);" title="Durham vs Essex: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(171, 178, 225);" title="Durham vs Essex: 70 pts">
                     70
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Durham vs Lincolnshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Durham vs Lincolnshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(129, 150, 188);" title="Durham vs Som &amp; Glo: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Durham vs Som &amp; Glo: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Durham vs Surrey: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Durham vs Surrey: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(46, 80, 144);" title="Durham vs Buckinghamshire: 100 pts">
+                  <td class="matrix-cell" style="background-color: rgb(59, 76, 192);" title="Durham vs Buckinghamshire: 100 pts">
                     100
                   </td>
                 
@@ -1351,35 +1390,35 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(138, 137, 78);" title="Essex vs Dorset: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Essex vs Dorset: 20 pts">
                     20
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(169, 98, 56);" title="Essex vs Warwickshire: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(193, 52, 79);" title="Essex vs Warwickshire: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(129, 150, 188);" title="Essex vs Hampshire: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Essex vs Hampshire: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(129, 150, 188);" title="Essex vs Yorkshire: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Essex vs Yorkshire: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(107, 176, 100);" title="Essex vs Durham: 30 pts">
+                  <td class="matrix-cell" style="background-color: rgb(220, 149, 163);" title="Essex vs Durham: 30 pts">
                     30
                   </td>
                 
@@ -1390,28 +1429,28 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(138, 137, 78);" title="Essex vs Lincolnshire: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Essex vs Lincolnshire: 20 pts">
                     20
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Essex vs Som &amp; Glo: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Essex vs Som &amp; Glo: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Essex vs Surrey: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Essex vs Surrey: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(87, 115, 166);" title="Essex vs Buckinghamshire: 90 pts">
+                  <td class="matrix-cell" style="background-color: rgb(96, 110, 203);" title="Essex vs Buckinghamshire: 90 pts">
                     90
                   </td>
                 
@@ -1423,42 +1462,42 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(107, 176, 100);" title="Lincolnshire vs Dorset: 30 pts">
+                  <td class="matrix-cell" style="background-color: rgb(220, 149, 163);" title="Lincolnshire vs Dorset: 30 pts">
                     30
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Lincolnshire vs Warwickshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: rgb(180, 4, 38);" title="Lincolnshire vs Warwickshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Lincolnshire vs Hampshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Lincolnshire vs Hampshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(169, 98, 56);" title="Lincolnshire vs Yorkshire: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(193, 52, 79);" title="Lincolnshire vs Yorkshire: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Lincolnshire vs Durham: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Lincolnshire vs Durham: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(129, 150, 188);" title="Lincolnshire vs Essex: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Lincolnshire vs Essex: 80 pts">
                     80
                   </td>
                 
@@ -1469,21 +1508,21 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(87, 115, 166);" title="Lincolnshire vs Som &amp; Glo: 90 pts">
+                  <td class="matrix-cell" style="background-color: rgb(96, 110, 203);" title="Lincolnshire vs Som &amp; Glo: 90 pts">
                     90
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(129, 150, 188);" title="Lincolnshire vs Surrey: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Lincolnshire vs Surrey: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(138, 137, 78);" title="Lincolnshire vs Buckinghamshire: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Lincolnshire vs Buckinghamshire: 20 pts">
                     20
                   </td>
                 
@@ -1495,49 +1534,49 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(129, 150, 188);" title="Som &amp; Glo vs Dorset: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Som &amp; Glo vs Dorset: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(87, 115, 166);" title="Som &amp; Glo vs Warwickshire: 90 pts">
+                  <td class="matrix-cell" style="background-color: rgb(96, 110, 203);" title="Som &amp; Glo vs Warwickshire: 90 pts">
                     90
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(138, 137, 78);" title="Som &amp; Glo vs Hampshire: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Som &amp; Glo vs Hampshire: 20 pts">
                     20
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(138, 137, 78);" title="Som &amp; Glo vs Yorkshire: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Som &amp; Glo vs Yorkshire: 20 pts">
                     20
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(138, 137, 78);" title="Som &amp; Glo vs Durham: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Som &amp; Glo vs Durham: 20 pts">
                     20
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Som &amp; Glo vs Essex: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Som &amp; Glo vs Essex: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(169, 98, 56);" title="Som &amp; Glo vs Lincolnshire: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(193, 52, 79);" title="Som &amp; Glo vs Lincolnshire: 10 pts">
                     10
                   </td>
                 
@@ -1548,14 +1587,14 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(171, 185, 210);" title="Som &amp; Glo vs Surrey: 70 pts">
+                  <td class="matrix-cell" style="background-color: rgb(171, 178, 225);" title="Som &amp; Glo vs Surrey: 70 pts">
                     70
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Som &amp; Glo vs Buckinghamshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Som &amp; Glo vs Buckinghamshire: 0 pts">
                     0
                   </td>
                 
@@ -1567,56 +1606,56 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(169, 98, 56);" title="Surrey vs Dorset: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(193, 52, 79);" title="Surrey vs Dorset: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Surrey vs Warwickshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: rgb(180, 4, 38);" title="Surrey vs Warwickshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(138, 137, 78);" title="Surrey vs Hampshire: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Surrey vs Hampshire: 20 pts">
                     20
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(129, 150, 188);" title="Surrey vs Yorkshire: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Surrey vs Yorkshire: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Surrey vs Durham: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Surrey vs Durham: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Surrey vs Essex: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Surrey vs Essex: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(138, 137, 78);" title="Surrey vs Lincolnshire: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Surrey vs Lincolnshire: 20 pts">
                     20
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(107, 176, 100);" title="Surrey vs Som &amp; Glo: 30 pts">
+                  <td class="matrix-cell" style="background-color: rgb(220, 149, 163);" title="Surrey vs Som &amp; Glo: 30 pts">
                     30
                   </td>
                 
@@ -1627,7 +1666,7 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(87, 115, 166);" title="Surrey vs Buckinghamshire: 90 pts">
+                  <td class="matrix-cell" style="background-color: rgb(96, 110, 203);" title="Surrey vs Buckinghamshire: 90 pts">
                     90
                   </td>
                 
@@ -1639,63 +1678,63 @@ h1 {
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Buckinghamshire vs Dorset: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Buckinghamshire vs Dorset: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Buckinghamshire vs Warwickshire: 0 pts">
+                  <td class="matrix-cell" style="background-color: rgb(180, 4, 38);" title="Buckinghamshire vs Warwickshire: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(129, 150, 188);" title="Buckinghamshire vs Hampshire: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Buckinghamshire vs Hampshire: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(138, 137, 78);" title="Buckinghamshire vs Yorkshire: 20 pts">
+                  <td class="matrix-cell" style="background-color: rgb(206, 101, 121);" title="Buckinghamshire vs Yorkshire: 20 pts">
                     20
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Buckinghamshire vs Durham: 0 pts">
+                  <td class="matrix-cell" style="background-color: rgb(180, 4, 38);" title="Buckinghamshire vs Durham: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(169, 98, 56);" title="Buckinghamshire vs Essex: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(193, 52, 79);" title="Buckinghamshire vs Essex: 10 pts">
                     10
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(129, 150, 188);" title="Buckinghamshire vs Lincolnshire: 80 pts">
+                  <td class="matrix-cell" style="background-color: rgb(134, 144, 214);" title="Buckinghamshire vs Lincolnshire: 80 pts">
                     80
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(200, 59, 35);" title="Buckinghamshire vs Som &amp; Glo: 0 pts">
+                  <td class="matrix-cell" style="background-color: #ffffff;" title="Buckinghamshire vs Som &amp; Glo: 0 pts">
                     0
                   </td>
                 
               
                 
                   
-                  <td class="matrix-cell" style="background-color: rgb(169, 98, 56);" title="Buckinghamshire vs Surrey: 10 pts">
+                  <td class="matrix-cell" style="background-color: rgb(193, 52, 79);" title="Buckinghamshire vs Surrey: 10 pts">
                     10
                   </td>
                 
@@ -1721,9 +1760,91 @@ h1 {
     </div>
   </div>
 
+  <div class="charts-wrapper">
+    <div class="chart-section" style="grid-column: 1 / -1;">
+      <h2 class="division-label">Average Score by Lane Pair</h2>
+      <div class="chart-container" style="height: 500px;">
+        <canvas id="combined-chart"></canvas>
+      </div>
+    </div>
+  </div>
+
   <div class="footer">
-    Counties 2026 • Head-to-Head Bonus Points Matrix
+    Counties 2026 • Science
   </div>
 </div>
-</body>
-</html>
+
+<script>
+// Combined chart data for all lane pairs (ordered by lane)
+const combinedChartCtx = document.getElementById('combined-chart').getContext('2d');
+
+// Prepare data
+const labels = [
+  'Pair 1-2 (MEN)','Pair 3-4 (MEN)','Pair 5-6 (MEN)','Pair 7-8 (MEN)','Pair 9-10 (MEN)','Pair 11-12 (WOMEN)','Pair 13-14 (WOMEN)','Pair 15-16 (WOMEN)','Pair 17-18 (WOMEN)','Pair 19-20 (WOMEN)'
+];
+const data = [
+  209.5,216.5,211.4,215.6,216.9,188.6,183.9,193.0,200.3,190.7
+];
+const colors = [];
+
+  colors.push('rgba(61, 159, 137, 0.7)');
+
+  colors.push('rgba(61, 159, 137, 0.7)');
+
+  colors.push('rgba(61, 159, 137, 0.7)');
+
+  colors.push('rgba(61, 159, 137, 0.7)');
+
+  colors.push('rgba(61, 159, 137, 0.7)');
+
+  colors.push('rgba(59, 76, 192, 0.7)');
+
+  colors.push('rgba(59, 76, 192, 0.7)');
+
+  colors.push('rgba(59, 76, 192, 0.7)');
+
+  colors.push('rgba(59, 76, 192, 0.7)');
+
+  colors.push('rgba(59, 76, 192, 0.7)');
+
+
+const combinedChart = new Chart(combinedChartCtx, {
+  type: 'bar',
+  data: {
+    labels: labels,
+    datasets: [{
+      label: 'Average Score',
+      data: data,
+      backgroundColor: colors,
+      borderColor: colors.map(c => c.replace('0.7', '1')),
+      borderWidth: 1,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          font: { family: 'Manrope, sans-serif' }
+        },
+        title: {
+          display: true,
+          text: 'Average Score'
+        }
+      },
+      x: {
+        ticks: {
+          font: { family: 'Manrope, sans-serif', size: 10 }
+        }
+      }
+    }
+  }
+});
+</script>

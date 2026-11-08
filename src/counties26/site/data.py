@@ -292,19 +292,43 @@ def team_page_data(conn: sqlite3.Connection, team_id: int) -> dict[str, object]:
 
 def diagram_data(conn: sqlite3.Connection) -> dict[str, dict]:
     """Generate head-to-head bonus points matrix for each division."""
-    def _get_color(bonus_points: float, max_bonus: float) -> str:
-        """Calculate RGB color for bonus points from 0 (red) to max (blue) through white."""
-        ratio = bonus_points / max_bonus if max_bonus > 0 else 0.5
-        if ratio < 0.5:
-            scaled = ratio * 2
-            r = int(200 - scaled * 155)
-            g = int(59 + scaled * 196)
-            b = int(35 + scaled * 109)
+    def _get_color(team_a_bonus: float, team_b_bonus: float, is_complete: bool) -> str:
+        """Calculate RGB color using coolwarm palette based on DIFFERENCE (REVERSED).
+        Difference = home_bonus - away_bonus.
+        -100 (home loses) -> red, 0 (tie) -> white, +100 (home wins) -> blue.
+        """
+        if not is_complete:
+            return "#ffffff"
+
+        # Calculate difference: home (row) minus away (column)
+        difference = team_a_bonus - team_b_bonus
+
+        # Normalize to -1 to 1 range (max difference is ±100)
+        normalized = difference / 100.0
+        # Clamp to [-1, 1]
+        normalized = max(-1.0, min(1.0, normalized))
+
+        # Matplotlib coolwarm REVERSED: red at -1, white at 0, blue at +1
+        # Red: rgb(180, 4, 38)
+        # White: rgb(247, 247, 247)
+        # Blue: rgb(59, 76, 192)
+
+        if normalized < 0:
+            # Red to White transition (normalized -1 to 0)
+            scaled = -normalized  # -1 becomes 1, 0 becomes 0
+            r = int(180 + (1 - scaled) * 67)  # 180 at scaled=1, 247 at scaled=0
+            g = int(4 + (1 - scaled) * 243)   # 4 at scaled=1, 247 at scaled=0
+            b = int(38 + (1 - scaled) * 209)  # 38 at scaled=1, 247 at scaled=0
+        elif normalized > 0:
+            # White to Blue transition (normalized 0 to 1)
+            scaled = normalized  # 0 becomes 0, 1 becomes 1
+            r = int(247 - scaled * 188)  # 247 at scaled=0, 59 at scaled=1
+            g = int(247 - scaled * 171)  # 247 at scaled=0, 76 at scaled=1
+            b = int(247 - scaled * 55)   # 247 at scaled=0, 192 at scaled=1
         else:
-            scaled = (ratio - 0.5) * 2
-            r = int(255 - scaled * 209)
-            g = int(255 - scaled * 175)
-            b = int(255 - scaled * 111)
+            # Exactly white at 0
+            return "rgb(247, 247, 247)"
+
         return f"rgb({r}, {g}, {b})"
 
     divisions = {"women": "Women's", "men": "Men's"}
@@ -324,10 +348,14 @@ def diagram_data(conn: sqlite3.Connection) -> dict[str, dict]:
             h2h_matrix[team_a] = {}
             for team_b in team_names:
                 if team_a == team_b:
-                    h2h_matrix[team_a][team_b] = None
+                    h2h_matrix[team_a][team_b] = {
+                        "team_a_bonus": None,
+                        "team_b_bonus": None,
+                        "is_complete": False,
+                    }
                 else:
-                    # Get bonus points only (no pinfall) - team_a earned against team_b
-                    row = conn.execute(
+                    # Get bonus points and completion status for team_a vs team_b
+                    row_a = conn.execute(
                         """
                         SELECT COALESCE(SUM(mp.bonus_points + mp.team_bonus), 0) AS points
                         FROM match_points mp
@@ -339,17 +367,96 @@ def diagram_data(conn: sqlite3.Connection) -> dict[str, dict]:
                         (team_ids[team_a], team_ids[team_a], team_ids[team_b],
                          team_ids[team_a], team_ids[team_b]),
                     ).fetchone()
-                    h2h_matrix[team_a][team_b] = row["points"] if row else 0
 
-        # Find max for color scaling (excluding None/diagonal)
-        all_points = [v for row in h2h_matrix.values() for v in row.values() if v is not None]
-        max_bonus = max(all_points) if all_points else 100
+                    row_b = conn.execute(
+                        """
+                        SELECT COALESCE(SUM(mp.bonus_points + mp.team_bonus), 0) AS points
+                        FROM match_points mp
+                        JOIN fixtures f ON f.id = mp.fixture_id
+                        WHERE mp.team_id = ?
+                          AND ((f.team_a_id = ? AND f.team_b_id = ?)
+                            OR (f.team_b_id = ? AND f.team_a_id = ?))
+                        """,
+                        (team_ids[team_b], team_ids[team_a], team_ids[team_b],
+                         team_ids[team_a], team_ids[team_b]),
+                    ).fetchone()
+
+                    team_a_bonus = row_a["points"] if row_a else 0
+                    team_b_bonus = row_b["points"] if row_b else 0
+
+                    # Check if fixture is complete (has match_points records)
+                    is_complete = team_a_bonus + team_b_bonus > 0
+
+                    h2h_matrix[team_a][team_b] = {
+                        "team_a_bonus": team_a_bonus,
+                        "team_b_bonus": team_b_bonus,
+                        "is_complete": is_complete,
+                    }
 
         result[division_key] = {
             "teams": team_names,
             "matrix": h2h_matrix,
-            "max_bonus": max_bonus,
-            "get_color": lambda points, max_b=max_bonus: _get_color(points, max_b) if points is not None else "#f0f0f0",
+            "get_color": _get_color,
         }
 
     return result
+
+
+def lane_averages(conn: sqlite3.Connection) -> dict[str, list[dict]]:
+    """Get average bowling scores grouped by lane pairs for all divisions combined."""
+    divisions = {"women": "Women's", "men": "Men's"}
+    all_pairs = []
+
+    for division_key, division_name in divisions.items():
+        # Query average scores by lane
+        rows = conn.execute(
+            """
+            SELECT
+              bs.lane,
+              COUNT(*) as games,
+              AVG(bs.scratch_score) as average,
+              MIN(bs.scratch_score) as min_score,
+              MAX(bs.scratch_score) as max_score
+            FROM bowler_scores bs
+            JOIN teams t ON t.id = bs.team_id
+            WHERE t.division = ?
+            GROUP BY bs.lane
+            ORDER BY bs.lane
+            """,
+            (division_key,),
+        ).fetchall()
+
+        # Group lanes into pairs
+        lanes_by_pair = {}
+        for row in rows:
+            lane = row["lane"]
+            # Pair number: (lane - 1) // 2 gives us which pair
+            # But we want to label by the first lane of the pair
+            pair_key = ((lane - 1) // 2) * 2 + 1
+            if pair_key not in lanes_by_pair:
+                lanes_by_pair[pair_key] = []
+            lanes_by_pair[pair_key].append(row)
+
+        # Calculate averages for each pair
+        for pair_key in sorted(lanes_by_pair.keys()):
+            lanes = lanes_by_pair[pair_key]
+            total_games = sum(row["games"] for row in lanes)
+            avg_average = sum(row["average"] * row["games"] for row in lanes) / total_games if total_games > 0 else 0
+            lane_numbers = ", ".join(str(row["lane"]) for row in lanes)
+
+            all_pairs.append({
+                "division": division_name,
+                "division_key": division_key,
+                "pair": f"Pair {pair_key}-{pair_key + 1}",
+                "pair_key": pair_key,
+                "lanes": lane_numbers,
+                "games": total_games,
+                "average": round(avg_average, 1),
+                "min": min(row["min_score"] for row in lanes),
+                "max": max(row["max_score"] for row in lanes),
+            })
+
+    # Sort by lane number
+    all_pairs.sort(key=lambda x: x["pair_key"])
+
+    return all_pairs

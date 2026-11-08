@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Counties 2026 Standings Diagram</title>
+<title>Counties 2026 Science</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root {
   --ink: #17252a;
@@ -51,6 +52,10 @@ h1 {
   margin: 0 0 40px 0;
   text-align: center;
   line-height: 1;
+}
+
+h2 {
+  margin: 0;
 }
 
 .division-section {
@@ -158,6 +163,34 @@ h1 {
   box-shadow: 0 2px 8px rgba(23, 37, 42, 0.1);
 }
 
+.charts-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  margin-top: 80px;
+  margin-bottom: 40px;
+}
+
+.chart-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.chart-container {
+  background: var(--card);
+  box-shadow: 0 20px 50px rgba(23, 37, 42, 0.07);
+  padding: 30px;
+  border-radius: 2px;
+  position: relative;
+  height: 400px;
+  width: 100%;
+}
+
+.chart-canvas {
+  max-height: 100%;
+}
+
 .footer {
   display: flex;
   align-items: center;
@@ -176,6 +209,10 @@ h1 {
     width: 40px;
     font-size: 0.7rem;
   }
+  .charts-wrapper {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
 }
 
 @media (max-width: 900px) {
@@ -190,15 +227,17 @@ h1 {
     flex-direction: column;
     gap: 20px;
   }
+  .charts-wrapper {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
 }
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>Counties 2026 H2H Bonus Points</h1>
-
   <div class="division-section">
-    <div class="division-label">Women's Division</div>
+    <h2 class="division-label">Women's Division</h2>
     <div class="matrix-wrapper">
       <table class="matrix-table">
         <thead>
@@ -217,9 +256,9 @@ h1 {
                 {% if team_a == team_b %}
                   <td class="matrix-cell diagonal">—</td>
                 {% else %}
-                  {% set points = women_h2h[team_a][team_b] %}
-                  <td class="matrix-cell" style="background-color: {{ women_get_color(points) }};" title="{{ team_a }} vs {{ team_b }}: {{ points | int }} pts">
-                    {{ points | int }}
+                  {% set cell = women_h2h[team_a][team_b] %}
+                  <td class="matrix-cell" style="background-color: {{ women_get_color(cell.team_a_bonus, cell.team_b_bonus, cell.is_complete) }};" title="{{ team_a }} vs {{ team_b }}: {{ cell.team_a_bonus | int }} pts">
+                    {{ cell.team_a_bonus | int }}
                   </td>
                 {% endif %}
               {% endfor %}
@@ -231,7 +270,7 @@ h1 {
   </div>
 
   <div class="division-section">
-    <div class="division-label">Men's Division</div>
+    <h2 class="division-label">Men's Division</h2>
     <div class="matrix-wrapper">
       <table class="matrix-table">
         <thead>
@@ -250,9 +289,9 @@ h1 {
                 {% if team_a == team_b %}
                   <td class="matrix-cell diagonal">—</td>
                 {% else %}
-                  {% set points = men_h2h[team_a][team_b] %}
-                  <td class="matrix-cell" style="background-color: {{ men_get_color(points) }};" title="{{ team_a }} vs {{ team_b }}: {{ points | int }} pts">
-                    {{ points | int }}
+                  {% set cell = men_h2h[team_a][team_b] %}
+                  <td class="matrix-cell" style="background-color: {{ men_get_color(cell.team_a_bonus, cell.team_b_bonus, cell.is_complete) }};" title="{{ team_a }} vs {{ team_b }}: {{ cell.team_a_bonus | int }} pts">
+                    {{ cell.team_a_bonus | int }}
                   </td>
                 {% endif %}
               {% endfor %}
@@ -273,9 +312,73 @@ h1 {
     </div>
   </div>
 
+  <div class="charts-wrapper">
+    <div class="chart-section" style="grid-column: 1 / -1;">
+      <h2 class="division-label">Average Score by Lane Pair</h2>
+      <div class="chart-container" style="height: 500px;">
+        <canvas id="combined-chart"></canvas>
+      </div>
+    </div>
+  </div>
+
   <div class="footer">
-    Counties 2026 • Head-to-Head Bonus Points Matrix
+    Counties 2026 • Science
   </div>
 </div>
-</body>
-</html>
+
+<script>
+// Combined chart data for all lane pairs (ordered by lane)
+const combinedChartCtx = document.getElementById('combined-chart').getContext('2d');
+
+// Prepare data
+const labels = [
+  {% for lane in all_lanes %}'{{ lane.pair }} ({{ lane.division_key | upper }})'{{ "," if not loop.last }}{% endfor %}
+];
+const data = [
+  {% for lane in all_lanes %}{{ lane.average }}{{ "," if not loop.last }}{% endfor %}
+];
+const colors = [];
+{% for lane in all_lanes %}
+  colors.push('{{ "rgba(59, 76, 192, 0.7)" if lane.division_key == "women" else "rgba(61, 159, 137, 0.7)" }}');
+{% endfor %}
+
+const combinedChart = new Chart(combinedChartCtx, {
+  type: 'bar',
+  data: {
+    labels: labels,
+    datasets: [{
+      label: 'Average Score',
+      data: data,
+      backgroundColor: colors,
+      borderColor: colors.map(c => c.replace('0.7', '1')),
+      borderWidth: 1,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          font: { family: 'Manrope, sans-serif' }
+        },
+        title: {
+          display: true,
+          text: 'Average Score'
+        }
+      },
+      x: {
+        ticks: {
+          font: { family: 'Manrope, sans-serif', size: 10 }
+        }
+      }
+    }
+  }
+});
+</script>
