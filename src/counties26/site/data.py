@@ -288,3 +288,68 @@ def team_page_data(conn: sqlite3.Connection, team_id: int) -> dict[str, object]:
         "fixtures": fixtures,
         "team_links": division_data["team_links"],
     }
+
+
+def diagram_data(conn: sqlite3.Connection) -> dict[str, dict]:
+    """Generate head-to-head bonus points matrix for each division."""
+    def _get_color(bonus_points: float, max_bonus: float) -> str:
+        """Calculate RGB color for bonus points from 0 (red) to max (blue) through white."""
+        ratio = bonus_points / max_bonus if max_bonus > 0 else 0.5
+        if ratio < 0.5:
+            scaled = ratio * 2
+            r = int(200 - scaled * 155)
+            g = int(59 + scaled * 196)
+            b = int(35 + scaled * 109)
+        else:
+            scaled = (ratio - 0.5) * 2
+            r = int(255 - scaled * 209)
+            g = int(255 - scaled * 175)
+            b = int(255 - scaled * 111)
+        return f"rgb({r}, {g}, {b})"
+
+    divisions = {"women": "Women's", "men": "Men's"}
+    result = {}
+
+    for division_key, division_name in divisions.items():
+        standings = team_standings(conn, division_key)
+        team_names = [s.team_name for s in standings]
+        team_ids = {s.team_name: conn.execute(
+            "SELECT id FROM teams WHERE name = ? AND division = ?",
+            (s.team_name, division_key)
+        ).fetchone()["id"] for s in standings}
+
+        # Build head-to-head matrix
+        h2h_matrix = {}
+        for team_a in team_names:
+            h2h_matrix[team_a] = {}
+            for team_b in team_names:
+                if team_a == team_b:
+                    h2h_matrix[team_a][team_b] = None
+                else:
+                    # Get bonus points only (no pinfall) - team_a earned against team_b
+                    row = conn.execute(
+                        """
+                        SELECT COALESCE(SUM(mp.bonus_points + mp.team_bonus), 0) AS points
+                        FROM match_points mp
+                        JOIN fixtures f ON f.id = mp.fixture_id
+                        WHERE mp.team_id = ?
+                          AND ((f.team_a_id = ? AND f.team_b_id = ?)
+                            OR (f.team_b_id = ? AND f.team_a_id = ?))
+                        """,
+                        (team_ids[team_a], team_ids[team_a], team_ids[team_b],
+                         team_ids[team_a], team_ids[team_b]),
+                    ).fetchone()
+                    h2h_matrix[team_a][team_b] = row["points"] if row else 0
+
+        # Find max for color scaling (excluding None/diagonal)
+        all_points = [v for row in h2h_matrix.values() for v in row.values() if v is not None]
+        max_bonus = max(all_points) if all_points else 100
+
+        result[division_key] = {
+            "teams": team_names,
+            "matrix": h2h_matrix,
+            "max_bonus": max_bonus,
+            "get_color": lambda points, max_b=max_bonus: _get_color(points, max_b) if points is not None else "#f0f0f0",
+        }
+
+    return result

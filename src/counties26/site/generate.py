@@ -9,7 +9,7 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from counties26.site.data import division_page_data, team_page_data
+from counties26.site.data import division_page_data, team_page_data, diagram_data
 
 TEMPLATES_DIR = Path(__file__).parent / "templates"
 STATIC_DIR = Path(__file__).parent / "static"
@@ -63,5 +63,17 @@ def build_site(conn: sqlite3.Connection, output_dir: str | Path) -> None:
         men_standings=men_data["standings"],
     )
     (output_path / "bigscreen.html").write_text(bigscreen_html)
+
+    diagram_template = env.get_template("diagram.html")
+    diagram_page_data = diagram_data(conn)
+    diagram_html = diagram_template.render(
+        women_teams=diagram_page_data["women"]["teams"],
+        women_h2h=diagram_page_data["women"]["matrix"],
+        women_get_color=diagram_page_data["women"]["get_color"],
+        men_teams=diagram_page_data["men"]["teams"],
+        men_h2h=diagram_page_data["men"]["matrix"],
+        men_get_color=diagram_page_data["men"]["get_color"],
+    )
+    (output_path / "diagram.html").write_text(diagram_html)
 
     shutil.copy(STATIC_DIR / "style.css", output_path / "style.css")

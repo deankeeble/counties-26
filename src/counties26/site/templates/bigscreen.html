@@ -199,7 +199,7 @@ h1 {
             <th scope="col">Team</th>
             <th scope="col">Played</th>
             <th scope="col">Points</th>
-            <th scope="col">Pinfall</th>
+            <th scope="col">Delta</th>
           </tr>
         </thead>
         <tbody>
@@ -208,7 +208,7 @@ h1 {
             <td class="team-name">{{ team.team_name }}</td>
             <td>{{ team.played }}</td>
             <td><strong>{{ team.total_points|int }}</strong></td>
-            <td>{{ team.total_pinfall }}</td>
+            <td>{% if loop.first %}&mdash;{% else %}{{ (team.total_points - women_standings[0].total_points)|int }}{% endif %}</td>
           </tr>
           {% endfor %}
         </tbody>
@@ -223,7 +223,7 @@ h1 {
             <th scope="col">Team</th>
             <th scope="col">Played</th>
             <th scope="col">Points</th>
-            <th scope="col">Pinfall</th>
+            <th scope="col">Delta</th>
           </tr>
         </thead>
         <tbody>
@@ -232,7 +232,7 @@ h1 {
             <td class="team-name">{{ team.team_name }}</td>
             <td>{{ team.played }}</td>
             <td><strong>{{ team.total_points|int }}</strong></td>
-            <td>{{ team.total_pinfall }}</td>
+            <td>{% if loop.first %}&mdash;{% else %}{{ (team.total_points - men_standings[0].total_points)|int }}{% endif %}</td>
           </tr>
           {% endfor %}
         </tbody>

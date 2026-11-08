@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Counties 2026 Standings Diagram</title>
+<style>
+:root {
+  --ink: #17252a;
+  --ink-soft: #26383d;
+  --muted: #58686d;
+  --paper: #f1f0eb;
+  --card: #fffefa;
+  --line: #d9ded9;
+  --teal: #3d9f89;
+  --teal-soft: #e1f1eb;
+  --terracotta: #d97e6c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: linear-gradient(135deg, var(--paper) 0%, #f8f7f3 50%, #e9efea 100%);
+  color: var(--ink);
+  font-family: Manrope, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  overflow-x: auto;
+}
+
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.07em;
+  margin: 0 0 40px 0;
+  text-align: center;
+  line-height: 1;
+}
+
+.division-section {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 80px;
+}
+
+.division-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--terracotta);
+  margin: 0 0 30px 0;
+}
+
+.matrix-wrapper {
+  overflow-x: auto;
+  background: var(--card);
+  box-shadow: 0 20px 50px rgba(23, 37, 42, 0.07);
+  border-radius: 2px;
+}
+
+.matrix-table {
+  border-collapse: collapse;
+  min-width: 100%;
+  font-size: 0.85rem;
+}
+
+.matrix-table th,
+.matrix-table td {
+  border: 1px solid var(--line);
+  padding: 12px;
+  text-align: center;
+  height: 50px;
+  width: 50px;
+}
+
+.matrix-table th {
+  background: var(--ink);
+  color: white;
+  font-weight: 600;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 0.75rem;
+  padding: 8px 4px;
+}
+
+.matrix-table tbody th {
+  background: var(--ink);
+  color: white;
+  font-weight: 600;
+  writing-mode: horizontal-tb;
+  text-orientation: initial;
+  text-align: right;
+  padding: 12px;
+  width: auto;
+  min-width: 80px;
+}
+
+.matrix-cell {
+  cursor: pointer;
+  transition: opacity 0.15s;
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 0.9rem;
+}
+
+.matrix-cell:hover {
+  opacity: 0.7;
+  box-shadow: inset 0 0 0 2px rgba(23, 37, 42, 0.3);
+}
+
+.matrix-cell.diagonal {
+  background: #f0f0f0;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.legend {
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.legend-label {
+  font-family: 'DM Mono', monospace;
+  font-weight: 600;
+}
+
+.legend-bar {
+  height: 40px;
+  width: 200px;
+  border-radius: 4px;
+  background: linear-gradient(to right,
+    rgb(200, 59, 35) 0%,
+    rgb(255, 255, 255) 50%,
+    rgb(46, 80, 144) 100%);
+  box-shadow: 0 2px 8px rgba(23, 37, 42, 0.1);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 60px;
+  font-size: 1.2rem;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+}
+
+@media (max-width: 1400px) {
+  .matrix-table th,
+  .matrix-table td {
+    padding: 8px;
+    height: 40px;
+    width: 40px;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 900px) {
+  body {
+    padding: 20px;
+  }
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+  }
+  .legend {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Counties 2026 H2H Bonus Points</h1>
+
+  <div class="division-section">
+    <div class="division-label">Women's Division</div>
+    <div class="matrix-wrapper">
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th></th>
+            {% for team in women_teams %}
+              <th title="{{ team }}">{{ team[:3] }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for team_a in women_teams %}
+            <tr>
+              <th title="{{ team_a }}">{{ team_a }}</th>
+              {% for team_b in women_teams %}
+                {% if team_a == team_b %}
+                  <td class="matrix-cell diagonal">—</td>
+                {% else %}
+                  {% set points = women_h2h[team_a][team_b] %}
+                  <td class="matrix-cell" style="background-color: {{ women_get_color(points) }};" title="{{ team_a }} vs {{ team_b }}: {{ points | int }} pts">
+                    {{ points | int }}
+                  </td>
+                {% endif %}
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="division-section">
+    <div class="division-label">Men's Division</div>
+    <div class="matrix-wrapper">
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th></th>
+            {% for team in men_teams %}
+              <th title="{{ team }}">{{ team[:3] }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for team_a in men_teams %}
+            <tr>
+              <th title="{{ team_a }}">{{ team_a }}</th>
+              {% for team_b in men_teams %}
+                {% if team_a == team_b %}
+                  <td class="matrix-cell diagonal">—</td>
+                {% else %}
+                  {% set points = men_h2h[team_a][team_b] %}
+                  <td class="matrix-cell" style="background-color: {{ men_get_color(points) }};" title="{{ team_a }} vs {{ team_b }}: {{ points | int }} pts">
+                    {{ points | int }}
+                  </td>
+                {% endif %}
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div>
+      <div class="legend-label">Bonus Points Scale</div>
+    </div>
+    <div class="legend-bar"></div>
+    <div>
+      <div class="legend-label">0 ← → Max</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Counties 2026 • Head-to-Head Bonus Points Matrix
+  </div>
+</div>
+</body>
+</html>
