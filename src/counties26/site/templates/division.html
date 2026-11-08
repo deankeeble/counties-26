@@ -18,7 +18,7 @@
 <section class="section-block"><div class="section-heading"><div><p class="eyebrow">01 / leaderboard</p><h2>Team standings</h2></div><span class="section-note">{{ standings|length }} teams</span></div>
 <table class="data-table standings-table">
   <thead>
-    <tr><th scope="col" style="padding: 1px 4px !important; line-height: 0.3 !important;">Team</th><th scope="col" style="padding: 1px 4px !important; line-height: 0.3 !important;">Played</th><th scope="col" style="padding: 1px 4px !important; line-height: 0.3 !important;">Points</th><th scope="col" style="padding: 1px 4px !important; line-height: 0.3 !important;">Pinfall</th></tr>
+    <tr><th scope="col" style="padding: 1px 4px !important; line-height: 0.3 !important;">Team</th><th scope="col" style="padding: 1px 4px !important; line-height: 0.3 !important;">Played</th><th scope="col" style="padding: 1px 4px !important; line-height: 0.3 !important;">Points</th><th scope="col" style="padding: 1px 4px !important; line-height: 0.3 !important;">Delta</th></tr>
   </thead>
   <tbody>
     {% for team in standings %}
@@ -26,7 +26,7 @@
       <td data-label="Team"><a class="team-name" href="{{ team.href }}">{{ team.team_name }}</a></td>
       <td data-label="Played">{{ team.played }}</td>
       <td data-label="Points"><strong>{{ team.total_points|int }}</strong></td>
-      <td data-label="Pinfall">{{ team.total_pinfall }}</td>
+      <td data-label="Delta">{% if loop.first %}&mdash;{% else %}{{ (team.total_points - standings[0].total_points)|int }}{% endif %}</td>
     </tr>
     {% endfor %}
   </tbody>
